@@ -1,0 +1,40 @@
+Introns across SRA may be found at both
+  /scratch0/langmead-fs1/sraintrons on HHPC and
+  /dcl01/leek/data/sraintrons on JHPCE
+
+File descriptions:
+
+all_SRA_introns.tsv.gz:
+  column 1: chromosome
+  column 2: start position (1-based, inclusive)
+  column 3: end position (1-based, inclusive)
+  column 4: strand
+  column 5: left motif (e.g., GT)
+  column 6: right motif (e.g., AG)
+  column 7: comma-separated list of indexes of samples in which intron was detected in order of
+  increasing sample index
+  column 8: comma-separated list of numbers of reads in which intron was found in corresponding samples from column 7
+all_SRA_introns.tsv.gz is coordinate-sorted.
+
+index_to_SRA_accession.tsv:
+  column 1: sample index
+  column 2: project accession number
+  column 3: sample accession number
+  column 4: experiment accession number
+  column 5: run accession number
+index_to_SRA_accession.tsv is sorted in order of increasing sample index.
+
+introns_and_sample_counts.tsv.gz:
+  column 1: chromosome
+  column 2: start position (1-based, inclusive)
+  column 3: end position (1-based, inclusive)
+  column 4: number N_s of samples in which intron was detected
+introns_and_sample_counts.tsv.gz is sorted in order of descending N_s.
+
+introns_and_coverages.tsv.gz:
+  column 1: chromosome
+  column 2: start position (1-based, inclusive)
+  column 3: end position (1-based, inclusive)
+  column 4: number N_c of reads covering intron across samples (before realignment)
+introns_and_coverages.tsv.gz is sorted in order of descending N_c.
+
