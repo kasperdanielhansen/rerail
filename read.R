@@ -29,3 +29,4 @@ print(object.size(intM), units = "auto")
 save(intM, file = "objects/intM.rda")
 cpM <- crossprod(intM)
 save(cpM, file = "objects/cpM.rda")
+
