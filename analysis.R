@@ -1,34 +1,39 @@
 library(Matrix)
-load("objects/cpM.rda")
+list.files("objects")
 
-library(lineprof)
+for(chr in c(1:22, "X", "Y", "M")) {
+    cat(chr, "\n")
+    load(sprintf("objects/chr%s_intM.rda", chr))
+    csums <- colSums(intM)
+    save(csums, file = sprintf("objects/chr%s_csums.rda", chr))
+}
 
-newM <- cpM[1:3000,1:3000]
-prof <- lineprof({
-system.time({
-    
-    tmp=randomSVD(newM)
+
+chrs <- paste0("chr", c(1:22, "X", "Y", "M"))
+names(chrs) <- chrs
+csums = lapply(chrs, function(chr) {
+    load(sprintf("objects/%s_csums.rda", chr), envir = environment())
+    csums
 })
+total.csums <- colSums(do.call(rbind, csums[1:22]))
+
+for(chr in chrs) {
+    cat(chr, "\n")
+    load(sprintf("objects/%s_intM.rda", chr))
+    tmp <- sweep(intM, FUN = "/", MARGIN = 2, total.csums/10^6)
 
 
-system.time({
-    tmp <- svd(newM)
-})
+
+for(chr in c(1:22, "X", "Y", "M")) {
+    cat(chr, "\n")
+    load(sprintf("objects/chr%s_csums.rda", chr))
+    csums <- colSums(intM)
+    save(csums, file = sprintf("objects/chr%s_csums.rda", chr))
+}
 
 
 
-## crossprod(X,Y) = t(X) %*% Y
 
-testA <- Matrix(rgamma(1000*300, shape = 3), ncol = 300, nrow = 1000)
-sv.test <- svd(testA)
-tmp = randomSVD(testA, method = "qr")
+intM <- rbind(chr1_int, chr2_int, chr3_int)
 
-all.equal(sv.test$d[1:100], tmp$d)
-all.equal(as.numeric(sv.test$u[, 1:100]), as.numeric(tmp$u))
-all.equal(as.numeric(sv.test$v[, 1:100]), as.numeric(tmp$v))
-
-debugonce(randomEigen)
-tmp$u[1:10,1:10] - sv.test$u[1:10,1:10]
-tmp$u[1:10,1] - sv.test$u[1:10,1]
-tmp$u[1:10,2]
-tmp$v[1:10,1:10] - sv.test$v[1:10,1:10]
+sweep(M, 1, colSums(M))
